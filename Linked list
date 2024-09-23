@@ -1,0 +1,179 @@
+#include <stdio.h> 
+#include <string.h> 
+#define MAX 100 
+// Function prototypes 
+void createList(char students[][50], int *n); 
+void insertStudent(char students[][50], int *n); 
+void deleteStudent(char students[][50], int *n); 
+void traverseList(char students[][50], int n); 
+void searchStudent(char students[][50], int n); 
+int main() { 
+char students[MAX][50]; // Array to hold student names 
+int n = 0, choice; 
+do { 
+printf("\n1. Create the list of students\n"); 
+printf("2. Insert a new student\n"); 
+printf("3. Delete a student\n"); 
+printf("4. Display student list\n"); 
+        printf("5. Search for a student\n"); 
+        printf("6. Exit\n"); 
+        printf("Enter your choice: "); 
+        scanf("%d", &choice); 
+  
+        switch (choice) { 
+            case 1: 
+                createList(students, &n); 
+                break; 
+            case 2: 
+                insertStudent(students, &n); 
+                break; 
+            case 3: 
+                deleteStudent(students, &n); 
+                break; 
+            case 4: 
+                traverseList(students, n); 
+                break; 
+            case 5: 
+                searchStudent(students, n); 
+                break; 
+            case 6: 
+                printf("Exiting the program...\n"); 
+                break; 
+            default: 
+                printf("Invalid choice. Please try again.\n"); 
+} 
+} while (choice != 6); 
+return 0; 
+} 
+// Function to create the list of students 
+void createList(char students[][50], int *n) { 
+int i, num; 
+printf("Enter the number of students: "); 
+scanf("%d", &num); 
+for (i = 0; i < num; i++) { 
+printf("Enter student name %d: ", i + 1); 
+scanf("%s", students[i]); 
+} 
+*n = num; 
+printf("Student list created successfully.\n"); 
+traverseList(students, *n); 
+} 
+// Function to insert a student at a specific index 
+void insertStudent(char students[][50], int *n) { 
+int pos, i; 
+char name[50]; 
+     
+    if (*n == MAX) { 
+        printf("List is full. Cannot insert more students.\n"); 
+        return; 
+    } 
+     
+    printf("Enter the student's name to insert: "); 
+    scanf("%s", name); 
+     
+    printf("Enter the position (0-based index) to insert the student: "); 
+    scanf("%d", &pos); 
+     
+    if (pos < 0 || pos > *n) { 
+        printf("Invalid position!\n"); 
+        return; 
+    } 
+     
+    // Shift the elements to the right 
+    for (i = *n; i > pos; i--) { 
+        strcpy(students[i], students[i - 1]); 
+    } 
+     
+    // Insert the new student 
+    strcpy(students[pos], name); 
+    (*n)++; 
+    printf("Student inserted successfully.\n"); 
+    traverseList(students, *n); 
+} 
+  
+// Function to delete a student by name or index 
+void deleteStudent(char students[][50], int *n) { 
+    int i, j, pos; 
+    char name[50], option; 
+     
+    if (*n == 0) { 
+        printf("The list is empty. Nothing to delete.\n"); 
+        return; 
+    } 
+     
+    printf("Delete by name or position? (n/p): "); 
+    scanf(" %c", &option); 
+     
+    if (option == 'n' || option == 'N') {  // Delete by name 
+        printf("Enter the student's name to delete: "); 
+        scanf("%s", name); 
+         
+        for (i = 0; i < *n; i++) { 
+            if (strcmp(students[i], name) == 0) { 
+                // Shift elements to the left 
+                for (j = i; j < *n - 1; j++) { 
+                    strcpy(students[j], students[j + 1]); 
+                } 
+                (*n)--; 
+                printf("Student '%s' deleted successfully.\n", name); 
+                traverseList(students, *n); 
+                return; 
+            } 
+        } 
+        printf("Student not found.\n"); 
+    }  
+    else if (option == 'p' || option == 'P') {  // Delete by index 
+        printf("Enter the position (0-based index) of the student to delete: "); 
+        scanf("%d", &pos); 
+         
+        if (pos < 0 || pos >= *n) { 
+            printf("Invalid position!\n"); 
+            return; 
+        } 
+         
+        // Shift elements to the left 
+        for (i = pos; i < *n - 1; i++) { 
+            strcpy(students[i], students[i + 1]); 
+        } 
+        (*n)--; 
+        printf("Student at position %d deleted successfully.\n", pos); 
+        traverseList(students, *n); 
+    }  
+    else { 
+        printf("Invalid option.\n"); 
+    } 
+} 
+  
+// Function to traverse and display the list of students 
+void traverseList(char students[][50], int n) { 
+    int i; 
+    if (n == 0) { 
+        printf("The list is empty.\n"); 
+    } else { 
+        printf("Student list: ["); 
+        for (i = 0; i < n; i++) { 
+            printf("%s", students[i]); 
+            if (i < n - 1) { 
+                printf(", "); 
+            } 
+        } 
+        printf("]\n"); 
+    } 
+} 
+  
+// Function to search for a student by name 
+void searchStudent(char students[][50], int n) { 
+    char name[50]; 
+    int i; 
+     
+    printf("Enter the student's name to search: "); 
+    scanf("%s", name); 
+     
+    for (i = 0; i < n; i++) { 
+        if (strcmp(students[i], name) == 0) { 
+            printf("%s found at position %d.\n", name, i); 
+            return; 
+        } 
+    } 
+    printf("Student not found.\n"); 
+}
